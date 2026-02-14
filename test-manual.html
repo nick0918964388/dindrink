@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>測試訂單系統</title>
+</head>
+<body>
+  <h1>LocalStorage 測試</h1>
+  <button onclick="checkStorage()">檢查儲存</button>
+  <button onclick="clearStorage()">清除儲存</button>
+  <pre id="output"></pre>
+
+  <script>
+    function checkStorage() {
+      const menus = localStorage.getItem('drink-order-menus');
+      const sessions = localStorage.getItem('drink-order-sessions');
+
+      const output = document.getElementById('output');
+      output.textContent = `菜單資料:\n${menus}\n\n訂單 Session:\n${sessions}`;
+
+      console.log('Menus:', JSON.parse(menus || '[]'));
+      console.log('Sessions:', JSON.parse(sessions || '[]'));
+    }
+
+    function clearStorage() {
+      localStorage.removeItem('drink-order-menus');
+      localStorage.removeItem('drink-order-sessions');
+      alert('已清除');
+      checkStorage();
+    }
+
+    // 自動檢查
+    checkStorage();
+  </script>
+</body>
+</html>

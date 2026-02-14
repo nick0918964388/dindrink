@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>測試數據流</title>
+</head>
+<body>
+    <h1>LocalStorage 數據檢查</h1>
+    <button onclick="checkData()">檢查數據</button>
+    <button onclick="clearData()">清空數據</button>
+    <pre id="output"></pre>
+
+    <script>
+        function checkData() {
+            const output = document.getElementById('output');
+            const menus = JSON.parse(localStorage.getItem('drink-order-menus') || '[]');
+            const sessions = JSON.parse(localStorage.getItem('drink-order-sessions') || '[]');
+
+            output.textContent = JSON.stringify({
+                menus: menus,
+                sessions: sessions,
+                sessionCount: sessions.length,
+                totalOrders: sessions.reduce((sum, s) => sum + (s.orders?.length || 0), 0)
+            }, null, 2);
+        }
+
+        function clearData() {
+            if (confirm('確定要清空所有數據嗎？')) {
+                localStorage.removeItem('drink-order-menus');
+                localStorage.removeItem('drink-order-sessions');
+                alert('數據已清空');
+                checkData();
+            }
+        }
+
+        // 自動檢查
+        window.onload = checkData;
+    </script>
+</body>
+</html>
