@@ -132,6 +132,45 @@ app.delete('/api/sessions/:id', (req, res) => {
   res.json({ success: true });
 });
 
+// === Ollama Proxy (解決 CORS) ===
+const OLLAMA_URL = process.env.OLLAMA_URL || 'https://jollama.nickai.cc';
+
+app.post('/api/ocr', async (req, res) => {
+  try {
+    const { image } = req.body;
+    
+    const response = await fetch(`${OLLAMA_URL}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: process.env.OLLAMA_MODEL || 'qwen3-vl:32b',
+        prompt: `請辨識這張飲料菜單圖片，提取所有飲料品項和價格。
+請以 JSON 格式回傳，格式如下：
+[{"name": "品項名稱", "price": 數字價格}, ...]
+
+注意：
+- 只提取飲料品項，不要包含其他文字
+- 價格必須是數字（不含貨幣符號）
+- 如果有大杯/中杯等規格，請分開列出
+- 只回傳 JSON 陣列，不要有其他文字`,
+        images: [image],
+        stream: false,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Ollama API 錯誤: ${response.status}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error('OCR 錯誤:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📸 OCR Proxy -> ${OLLAMA_URL}`);
 });
