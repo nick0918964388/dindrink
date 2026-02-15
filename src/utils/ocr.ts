@@ -5,7 +5,7 @@ import { MenuItem } from '../types';
 const API_BASE = '/api';
 
 // Ollama 設定
-const OLLAMA_URL = import.meta.env.VITE_OLLAMA_URL || 'https://jollama.nickai.cc';
+const OLLAMA_URL = import.meta.env.VITE_OLLAMA_URL || 'http://192.168.1.161:11434';
 
 export const processMenuImage = async (imageFile: File): Promise<MenuItem[]> => {
   try {
