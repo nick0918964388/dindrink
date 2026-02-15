@@ -7,7 +7,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Initialize database
-const db = new Database(path.join(__dirname, 'drink-order.db'));
+// Use DB_PATH env var for Docker, fallback to local file for development
+const dbPath = process.env.DB_PATH || path.join(__dirname, 'drink-order.db');
+const db = new Database(dbPath);
 
 // Create tables with new schema
 db.exec(`
