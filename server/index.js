@@ -389,7 +389,7 @@ app.delete('/api/sessions/:id', (req, res) => {
 });
 
 // === Gemini Vision API ===
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyDfyQ1YJrDvr3iDI5HZLVJuBjYz50Cz1I0';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = 'gemini-2.5-flash';
 
 app.post('/api/ocr', async (req, res) => {
