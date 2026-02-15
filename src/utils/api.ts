@@ -1,4 +1,4 @@
-import { Menu, OrderSession, CustomerOrder, Restaurant, RestaurantWithMenu, GroupOrder, OrderItem, OrderItemDetail } from '../types';
+import { Menu, OrderSession, CustomerOrder, Restaurant, RestaurantWithMenu, GroupOrder, OrderItemDetail } from '../types';
 
 // Use relative path so Vite proxy works for both local and ngrok
 const API_BASE = '/api';

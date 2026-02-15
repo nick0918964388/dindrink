@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { getSessionById, getMenuById, addOrderToSession } from '../utils/api';
-import { OrderSession, MenuItem, OrderItem, IceLevel, SugarLevel, CustomerOrder } from '../types';
+import { OrderSession, MenuItem, OrderItemDetail, TemperatureOption, SugarLevel, CustomerOrder } from '../types';
 
-const ICE_LEVELS: IceLevel[] = ['正常冰', '少冰', '微冰', '去冰'];
+const TEMPERATURE_OPTIONS: TemperatureOption[] = ['正常冰', '少冰', '微冰', '去冰', '常溫', '熱'];
 const SUGAR_LEVELS: SugarLevel[] = ['正常糖', '少糖', '微糖', '無糖'];
 
 export default function Order() {
@@ -12,7 +12,7 @@ export default function Order() {
   const [session, setSession] = useState<OrderSession | null>(null);
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [customerName, setCustomerName] = useState('');
-  const [cart, setCart] = useState<OrderItem[]>([]);
+  const [cart, setCart] = useState<OrderItemDetail[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -51,24 +51,25 @@ export default function Order() {
   }, [sessionId]);
 
   const handleAddToCart = (menuItem: MenuItem) => {
-    const newItem: OrderItem = {
+    const newItem: OrderItemDetail = {
       menuItemId: menuItem.id,
       menuItemName: menuItem.name,
       price: menuItem.price,
-      iceLevel: '正常冰',
+      temperature: '正常冰',
       sugarLevel: '正常糖',
+      quantity: 1,
     };
     setCart([...cart, newItem]);
   };
 
   const handleUpdateCartItem = (
     index: number,
-    field: 'iceLevel' | 'sugarLevel',
-    value: IceLevel | SugarLevel
+    field: 'temperature' | 'sugarLevel',
+    value: TemperatureOption | SugarLevel
   ) => {
     const newCart = [...cart];
-    if (field === 'iceLevel') {
-      newCart[index].iceLevel = value as IceLevel;
+    if (field === 'temperature') {
+      newCart[index].temperature = value as TemperatureOption;
     } else {
       newCart[index].sugarLevel = value as SugarLevel;
     }
@@ -104,7 +105,7 @@ export default function Order() {
     setIsSubmitted(true);
   };
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   if (loading) {
     return (
@@ -244,20 +245,20 @@ export default function Order() {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">
-                        冰量
+                        溫度
                       </label>
                       <select
-                        value={item.iceLevel}
+                        value={item.temperature}
                         onChange={(e) =>
                           handleUpdateCartItem(
                             index,
-                            'iceLevel',
-                            e.target.value as IceLevel
+                            'temperature',
+                            e.target.value as TemperatureOption
                           )
                         }
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                       >
-                        {ICE_LEVELS.map((level) => (
+                        {TEMPERATURE_OPTIONS.map((level) => (
                           <option key={level} value={level}>
                             {level}
                           </option>

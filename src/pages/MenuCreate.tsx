@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { saveMenu } from '../utils/api';
 import { processMenuImage } from '../utils/ocr';
-import { Menu, MenuItem } from '../types';
+import { MenuItem } from '../types';
 
 export default function MenuCreate() {
   const navigate = useNavigate();
@@ -100,14 +100,17 @@ export default function MenuCreate() {
       return;
     }
 
-    const menu: Menu = {
+    // Note: The old Menu type doesn't have name. For now we use the legacy API.
+    // The name is stored in Restaurant, not Menu.
+    const menu = {
       id: uuidv4(),
-      name: menuName,
+      restaurantId: '', // Will be set by backend
       items: validItems,
       createdAt: new Date().toISOString()
     };
 
-    await saveMenu(menu);
+    // Save with name for legacy API compatibility
+    await saveMenu({ ...menu, name: menuName } as any);
     navigate('/');
   };
 

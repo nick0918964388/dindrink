@@ -10,7 +10,7 @@ interface ItemSummary {
   quantity: number;
   details: Array<{
     customerName: string;
-    iceLevel: string;
+    temperature: string;
     sugarLevel: string;
   }>;
 }
@@ -88,7 +88,7 @@ export default function Organizer() {
       itemSummary[item.menuItemId].quantity += 1;
       itemSummary[item.menuItemId].details.push({
         customerName: order.customerName,
-        iceLevel: item.iceLevel,
+        temperature: item.temperature,
         sugarLevel: item.sugarLevel,
       });
     });
@@ -239,7 +239,7 @@ export default function Organizer() {
                             {detail.customerName}
                           </span>
                           <span className="text-gray-600">
-                            {detail.iceLevel} / {detail.sugarLevel}
+                            {detail.temperature} / {detail.sugarLevel}
                           </span>
                         </div>
                       ))}
@@ -296,7 +296,7 @@ export default function Organizer() {
                                     {item.menuItemName}
                                   </p>
                                   <p className="text-gray-600">
-                                    {item.iceLevel} / {item.sugarLevel}
+                                    {item.temperature} / {item.sugarLevel}
                                   </p>
                                 </div>
                                 <span className="text-gray-700 font-medium ml-2">

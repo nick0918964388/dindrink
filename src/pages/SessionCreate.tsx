@@ -3,14 +3,15 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { QRCodeSVG } from 'qrcode.react';
 import { getMenuById, saveSession } from '../utils/api';
-import { OrderSession, Menu } from '../types';
+import { OrderSession } from '../types';
 
 export default function SessionCreate() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const menuId = searchParams.get('menuId');
 
-  const [menu, setMenu] = useState<Menu | null>(null);
+  // Menu type doesn't have name property anymore, using extended type
+  const [menu, setMenu] = useState<{ id: string; name: string; items: { id: string; name: string; price: number }[] } | null>(null);
   const [sessionId] = useState(uuidv4());
   const [showQR, setShowQR] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -29,7 +30,8 @@ export default function SessionCreate() {
         return;
       }
 
-      setMenu(foundMenu);
+      // Cast to extended type with name (legacy API returns menu with name)
+      setMenu(foundMenu as any);
       setLoading(false);
     };
 

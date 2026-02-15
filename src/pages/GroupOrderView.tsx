@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { getGroupOrderById, updateGroupOrderStatus, deleteOrderItem } from '../utils/api';
-import { GroupOrder, Menu, MenuItem, OrderItemDetail } from '../types';
+import { GroupOrder, MenuItem } from '../types';
 
 interface ItemSummary {
   menuItemName: string;
@@ -10,7 +10,7 @@ interface ItemSummary {
   quantity: number;
   details: Array<{
     userName: string;
-    iceLevel: string;
+    temperature: string;
     sugarLevel: string;
     itemQuantity: number;
   }>;
@@ -118,7 +118,7 @@ export default function GroupOrderView() {
       itemSummary[item.menuItemId].quantity += qty;
       itemSummary[item.menuItemId].details.push({
         userName: orderItem.userName,
-        iceLevel: item.iceLevel,
+        temperature: item.temperature,
         sugarLevel: item.sugarLevel,
         itemQuantity: qty,
       });
@@ -296,7 +296,7 @@ export default function GroupOrderView() {
                             {detail.userName} {detail.itemQuantity > 1 && `×${detail.itemQuantity}`}
                           </span>
                           <span className="text-gray-600">
-                            {detail.iceLevel} / {detail.sugarLevel}
+                            {detail.temperature} / {detail.sugarLevel}
                           </span>
                         </div>
                       ))}
@@ -368,7 +368,7 @@ export default function GroupOrderView() {
                                     )}
                                   </p>
                                   <p className="text-gray-600">
-                                    {item.iceLevel} / {item.sugarLevel}
+                                    {item.temperature} / {item.sugarLevel}
                                   </p>
                                 </div>
                                 <span className="text-gray-700 font-medium ml-2">

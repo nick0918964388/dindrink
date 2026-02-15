@@ -173,7 +173,7 @@ export default function OrderPage() {
   const handleUpdateCartItem = (
     index: number,
     field: 'temperature' | 'sugarLevel' | 'quantity',
-    value: TemperatureOption | SugarLevel | number
+    value: string | number
   ) => {
     const newCart = [...cart];
     if (field === 'temperature') {

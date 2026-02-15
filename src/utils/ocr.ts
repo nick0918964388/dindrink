@@ -4,8 +4,8 @@ import { MenuItem } from '../types';
 // 後端 OCR API（使用 Ollama VLM）
 const API_BASE = '/api';
 
-// Ollama 設定
-const OLLAMA_URL = import.meta.env.VITE_OLLAMA_URL || 'http://192.168.1.161:11434';
+// Ollama 設定 (URL configured for future use if needed)
+// const OLLAMA_URL = import.meta.env.VITE_OLLAMA_URL || 'http://192.168.1.161:11434';
 
 export const processMenuImage = async (imageFile: File): Promise<MenuItem[]> => {
   try {
